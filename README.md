@@ -10,12 +10,18 @@ Dữ liệu đầu vào là một tập dữ liệu đánh giá phim được th
 Tệp ratings.dat chứa 10 triệu đánh giá và 100.000 thẻ được áp dụng cho 10.000 bộ phim bởi
 72.000 người dùng. Mỗi dòng trong tệp đại diện cho một đánh giá của một người dùng với một
 bộ phim, và có định dạng như sau:
+
 UserID::MovieID::Rating::Timestamp
+
 Các đánh giá được thực hiện trên thang điểm 5 sao, có thể chia nửa sao. Dấu thời gian
 (Timestamp) là số giây kể từ nửa đêm UTC ngày 1 tháng 1 năm 1970. Ví dụ nội dung tệp:
+
 1::122::5::838985046
+
 1::185::5::838983525
+
 1::231::5::838983392
+
 Nhiệm vụ yêu cầu
 Dưới đây là các bước bạn cần thực hiện để hoàn thành bài tập:
 1. Tải về máy ảo có môi trường giống với máy chấm điểm. Bạn có thể dùng máy của mình,
