@@ -7,18 +7,17 @@ import psycopg2
 
 DATABASE_NAME = 'dds_assgn1'
 
-
 def getopenconnection(user='postgres', password='1234', dbname='postgres'):
     return psycopg2.connect("dbname='" + dbname + "' user='" + user + "' host='localhost' password='" + password + "'")
 
-
-def loadratings(ratingstablename, ratingsfilepath, openconnection): 
+def loadratings(ratingstablename, ratingsfilepath, openconnection):
     """
     Function to load data in @ratingsfilepath file to a table called @ratingstablename.
     """
     create_db(DATABASE_NAME)
     con = openconnection
     cur = con.cursor()
+    cur.execute("DROP TABLE IF EXISTS " + ratingstablename + ";")
     cur.execute("create table " + ratingstablename + "(userid integer, extra1 char, movieid integer, extra2 char, rating float, extra3 char, timestamp bigint);")
     cur.copy_from(open(ratingsfilepath),ratingstablename,sep=':')
     cur.execute("alter table " + ratingstablename + " drop column extra1, drop column extra2, drop column extra3, drop column timestamp;")
@@ -47,7 +46,7 @@ def rangepartition(ratingstablename, numberofpartitions, openconnection):
 
 def roundrobinpartition(ratingstablename, numberofpartitions, openconnection):
     """
-    Partition the table using round robin, optimized version for faster execution.
+    Partition the table using round robin
     """
     con = openconnection
     cur = con.cursor()
@@ -121,6 +120,7 @@ def rangeinsert(ratingstablename, userid, itemid, rating, openconnection):
     if rating % delta == 0 and index != 0:
         index = index - 1
     table_name = RANGE_TABLE_PREFIX + str(index)
+    cur.execute("INSERT INTO " + ratingstablename + "(userid, movieid, rating) values (" + str(userid) + "," + str(itemid) + "," + str(rating) + ");")
     cur.execute("insert into " + table_name + "(userid, movieid, rating) values (" + str(userid) + "," + str(itemid) + "," + str(rating) + ");")
     cur.close()
     con.commit()
